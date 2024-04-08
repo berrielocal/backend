@@ -13,19 +13,19 @@ import jakarta.persistence.Table
 data class CartItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val cartItemId: Long? = null,
+   var cartItemId: Long? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-    val product: Product? = null,
+   var product: Product? = null,
 
-    val count: Long? = null,
+   var count: Long? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-    val customer: Shop? = null,
+   var customer: Shop? = null,
 )

@@ -18,22 +18,22 @@ import java.math.BigDecimal
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val productId: String? = null,
+   var productId: Long? = null,
 
-    val name: String? = null,
+   var name: String? = null,
 
-    val units: String? = null,
+   var units: String? = null,
 
-    val minSize: Double? = null,
+   var minSize: Double? = null,
 
-    val maxSize: Double? = null,
+   var maxSize: Double? = null,
 
-    val cost: BigDecimal? = null,
+   var cost: BigDecimal? = null,
 
-    val imageUrl: String? = null,
+   var imageUrl: String? = null,
 
     @Convert(converter = StringToSetCategoryAttributeConverter::class)
-    val categories: Set<Category>? = emptySet()
+   var categories: Set<Category>? = emptySet()
 ) {
     @OneToMany(
         mappedBy = "product",
@@ -41,7 +41,7 @@ data class Product(
         fetch = FetchType.LAZY,
         orphanRemoval = false
     )
-    val orderParts: MutableList<OrderPart> = mutableListOf()
+   var orderParts: MutableList<OrderPart> = mutableListOf()
 
     @OneToMany(
         mappedBy = "product",
@@ -49,5 +49,5 @@ data class Product(
         fetch = FetchType.LAZY,
         orphanRemoval = false
     )
-    val cartItems: MutableList<CartItem> = mutableListOf()
+   var cartItems: MutableList<CartItem> = mutableListOf()
 }

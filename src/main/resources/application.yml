@@ -9,6 +9,14 @@ spring:
     locations: classpath:db
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret:
+    access: 0LzQsNGA0LzQt44123bffgadsfag70LDQtA==
+    refresh: 0L/QvtC90Yfasdasdasbnbkjqwweq5688975QuNC60Lg=
+  expiration:
+    access: 36000000
+    refresh: 8640000000

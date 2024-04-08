@@ -1,0 +1,5 @@
+ALTER TABLE shops
+    ADD role VARCHAR(255);
+
+ALTER TABLE products
+    ALTER COLUMN cost TYPE DECIMAL USING (cost::DECIMAL);

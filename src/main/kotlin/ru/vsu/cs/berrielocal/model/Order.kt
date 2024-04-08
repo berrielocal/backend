@@ -17,18 +17,18 @@ import java.time.LocalDateTime
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val orderId: Long? = null,
+   var orderId: Long? = null,
 
-    val address: String? = null,
+   var address: String? = null,
 
     @CreatedDate
-    val date: LocalDateTime? = null,
+   var date: LocalDateTime? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-    val customer: Shop? = null,
+   var customer: Shop? = null,
 ) {
     @OneToMany(
         mappedBy = "order",
@@ -36,5 +36,5 @@ data class Order(
         fetch = FetchType.LAZY,
         orphanRemoval = false
     )
-    val ordersParts: MutableList<OrderPart> = mutableListOf()
+   var ordersParts: MutableList<OrderPart> = mutableListOf()
 }

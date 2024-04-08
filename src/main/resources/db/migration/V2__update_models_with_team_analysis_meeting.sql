@@ -1,7 +1,7 @@
 CREATE TABLE cart_items
 (
     cart_item_id       BIGINT       NOT NULL,
-    product_product_id VARCHAR(255) NOT NULL,
+    product_product_id BIGINT NOT NULL,
     count              BIGINT,
     customer_shop_id   BIGINT       NOT NULL,
     CONSTRAINT pk_cart_items PRIMARY KEY (cart_item_id)

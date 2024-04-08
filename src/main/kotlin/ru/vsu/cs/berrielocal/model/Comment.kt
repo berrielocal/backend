@@ -18,24 +18,24 @@ import java.time.LocalDateTime
 data class Comment (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val commentId: Long? = null,
+   var commentId: Long? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-    val customer: Shop? = null,
+   var customer: Shop? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-    val seller: Shop? = null,
+   var seller: Shop? = null,
 
-    val rate: Double? = null,
+   var rate: Double? = null,
 
-    val text: String? = null,
+   var text: String? = null,
 
     @CreatedDate
-    val createdAt: LocalDateTime? = null
+   var createdAt: LocalDateTime? = null
 )
