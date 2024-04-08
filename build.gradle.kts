@@ -19,8 +19,19 @@ repositories {
 }
 
 dependencies {
+    // Spring Web
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // Json
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // Database
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql:42.3.3")
+    implementation("org.flywaydb:flyway-core:9.5.1")
+
+
+    // Test
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

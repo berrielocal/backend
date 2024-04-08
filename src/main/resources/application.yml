@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/berrielocal
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: root
+  flyway:
+    enabled: true
+    locations: classpath:db
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
