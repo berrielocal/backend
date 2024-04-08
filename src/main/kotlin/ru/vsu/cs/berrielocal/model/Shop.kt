@@ -1,6 +1,7 @@
 package ru.vsu.cs.berrielocal.model
 
 import jakarta.persistence.CascadeType
+import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -9,6 +10,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import ru.vsu.cs.berrielocal.model.enums.Category
+import ru.vsu.cs.berrielocal.repository.converter.StringToSetCategoryAttributeConverter
 
 @Entity
 @Table(name = "shops")
@@ -27,7 +30,10 @@ data class Shop (
 
     val imageUrl: String? = null,
 
-    val isActive: Boolean = false
+    val isActive: Boolean = false,
+
+    @Convert(converter = StringToSetCategoryAttributeConverter::class)
+    val categories: Set<Category>? = emptySet()
 ) {
     @OneToMany(
         mappedBy = "customer",
@@ -53,6 +59,11 @@ data class Shop (
     )
     val orders: MutableList<Order> = mutableListOf()
 
-    @ManyToMany(mappedBy = "shops", fetch = FetchType.LAZY)
-    val categories: List<Category> = emptyList()
+    @OneToMany(
+        mappedBy = "customer",
+        cascade = [CascadeType.ALL],
+        fetch = FetchType.LAZY,
+        orphanRemoval = false
+    )
+    val cartItems: MutableList<CartItem> = mutableListOf()
 }
