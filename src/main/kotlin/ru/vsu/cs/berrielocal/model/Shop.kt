@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.springframework.security.core.GrantedAuthority
@@ -42,7 +43,6 @@ data class Shop(
 
     @Enumerated(EnumType.STRING)
     var role: Role? = null
-
 ) : UserDetails {
     @OneToMany(
         mappedBy = "customer",
@@ -75,6 +75,14 @@ data class Shop(
         orphanRemoval = false
     )
     var cartItems: MutableList<CartItem> = mutableListOf()
+
+    @OneToMany(
+        mappedBy = "shop",
+        cascade = [CascadeType.ALL],
+        fetch = FetchType.LAZY,
+        orphanRemoval = false
+    )
+    var products: MutableList<Product> = mutableListOf()
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(role as GrantedAuthority)
