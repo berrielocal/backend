@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
+    kotlin("kapt") version "1.3.72"
 }
 
 group = "ru.vsu.cs"
@@ -29,6 +30,10 @@ dependencies {
 
     // Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+    // Mapper
+    implementation("org.mapstruct:mapstruct:1.3.1.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.3.1.Final")
 
 
     // Json

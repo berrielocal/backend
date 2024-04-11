@@ -26,9 +26,6 @@ class AuthController(
 
     @PostMapping("/users/login")
     @Operation(summary = "Авторизовать пользователя", description = "Принимает UserAuthDTO")
-    @Throws(
-        AuthenticationException::class
-    )
     fun authorizeUser(@RequestBody request: UserAuthorizationRequest): ResponseEntity<JwtResponse?> {
         val response = userService.authorizeUser(request)
 
@@ -37,9 +34,6 @@ class AuthController(
 
     @PostMapping("/users/registration")
     @Operation(summary = "Регистрация пользователя")
-    @Throws(
-        AuthenticationException::class
-    )
     fun registrationUser(
         @RequestBody request: UserRegistrationRequest
     ): ResponseEntity<JwtResponse?> {

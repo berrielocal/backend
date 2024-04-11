@@ -1,6 +1,7 @@
 package ru.vsu.cs.berrielocal.service
 
 import org.springframework.stereotype.Service
+import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.model.enums.Category
 import ru.vsu.cs.berrielocal.repository.ProductRepository
 import ru.vsu.cs.berrielocal.repository.ShopRepository
@@ -19,13 +20,11 @@ class MatchService(
         val shopCategories = productRepository.findAllCategoriesByShopId(shopId)
 
         if (customerDb.isEmpty || shopCategories.isEmpty())
-            throw IllegalArgumentException("Entity not found in db by id")
+            throw ShopNotFoundException("Entity not found in db by id")
 
         val customerEntity = customerDb.get()
-        val customerCategories = customerEntity.categories
+        val customerCategories = customerEntity.categories ?: emptySet()
 
-        if (customerCategories.isNullOrEmpty())
-            throw IllegalStateException("Not found any category customerId: $customerId")
 
         val intersection = evaluateIntersection(customerCategories, shopCategories)
 
@@ -34,7 +33,7 @@ class MatchService(
         return (matchLevel * 100).round()
     }
 
-    fun evaluateIntersection(
+    private fun evaluateIntersection(
         customerCategories: Set<Category>,
         shopCategories: Set<Category>
     ): Set<Category> {
