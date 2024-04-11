@@ -38,7 +38,7 @@ class ShopService(
         }
     }
 
-    fun getById(shopId: Long) = shopRepository.findById(shopId).getOrNull()
+    fun getById(shopId: Long?) = shopId?.let { shopRepository.findById(shopId).getOrNull() }
 
 
     fun updateById(shopId: Long, shopFromRequest: ShopUpdateRequest) {
