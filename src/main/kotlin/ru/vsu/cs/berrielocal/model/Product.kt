@@ -37,7 +37,7 @@ data class Product(
     var categories: Set<Category>? = emptySet(),
 
     @ManyToOne(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         optional = false
     )
     var shop: Shop? = null,

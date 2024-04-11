@@ -1,5 +1,6 @@
 package ru.vsu.cs.berrielocal.service
 
+import kotlin.jvm.optionals.getOrNull
 import org.springframework.stereotype.Service
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
@@ -36,6 +37,9 @@ class ShopService(
             throw ShopNotFoundException("Not found any shop by shopId: $shopId")
         }
     }
+
+    fun getById(shopId: Long) = shopRepository.findById(shopId).getOrNull()
+
 
     fun updateById(shopId: Long, shopFromRequest: ShopUpdateRequest) {
         val shopModel = mapper.toModel(

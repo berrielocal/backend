@@ -15,4 +15,13 @@ interface ProductRepository : JpaRepository<Product, Long> {
         """
     )
     fun findAllCategoriesByShopId(shopId: Long): Set<Category>
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            SELECT * FROM products p
+            WHERE p.shop_shop_id = :shopId
+        """
+    )
+    fun findAllProductsByShopId(shopId: Long): List<Product>
 }
