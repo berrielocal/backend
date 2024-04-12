@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   postgres:
@@ -20,6 +20,8 @@ services:
       - "1111:8080"
     depends_on:
       - postgres
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://host.docker.internal:5433/berrielocal
 
 volumes:
   postgres_data:
