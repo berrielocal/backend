@@ -16,22 +16,26 @@ import ru.vsu.cs.berrielocal.model.enums.OrderPartStatus
 data class OrderPart(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   var orderPartId: Long? = null,
+    var orderPartId: Long? = null,
 
     @Enumerated(EnumType.STRING)
-   var status: OrderPartStatus? = null,
+    var status: OrderPartStatus? = null,
+
+    @ManyToOne(
+        fetch = FetchType.LAZY,
+        optional = true
+    )
+    var order: Order? = null,
 
     @ManyToOne(
         fetch = FetchType.LAZY,
         optional = false
     )
-   var order: Order? = null,
+    var product: Product? = null,
 
-    @ManyToOne(
-        fetch = FetchType.LAZY,
-        optional = false
-    )
-   var product: Product? = null,
+    var size: Long? = null,
+
+    var customerId: Long? = null
 )
 
 

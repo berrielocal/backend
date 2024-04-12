@@ -64,7 +64,7 @@ class ProductController(
     ): ResponseEntity<*> {
         productService.updateById(productId, product)
 
-        return ResponseEntity.noContent().build<Any>()
+        return ResponseEntity.ok().build<Any>()
     }
 
     @DeleteMapping("/product/{productId}")
@@ -74,6 +74,6 @@ class ProductController(
     ): ResponseEntity<*> {
         productService.deleteById(productId)
 
-        return ResponseEntity.noContent().build<Any>()
+        return ResponseEntity.ok().build<Any>()
     }
 }

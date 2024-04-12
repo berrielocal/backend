@@ -39,7 +39,7 @@ class CommentController(
     ): ResponseEntity<*> {
         commentService.saveComment(request)
 
-        return ResponseEntity.noContent().build<Any>()
+        return ResponseEntity.ok().build<Any>()
     }
 
     @DeleteMapping("/comment/{commentId}")
@@ -49,6 +49,6 @@ class CommentController(
     ): ResponseEntity<*> {
         commentService.deleteComment(commentId)
 
-        return ResponseEntity.noContent().build<Any>()
+        return ResponseEntity.ok().build<Any>()
     }
 }

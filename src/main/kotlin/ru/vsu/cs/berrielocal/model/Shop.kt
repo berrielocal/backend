@@ -69,14 +69,6 @@ data class Shop(
     var orders: MutableList<Order> = mutableListOf()
 
     @OneToMany(
-        mappedBy = "customer",
-        cascade = [CascadeType.ALL],
-        fetch = FetchType.LAZY,
-        orphanRemoval = false
-    )
-    var cartItems: MutableList<CartItem> = mutableListOf()
-
-    @OneToMany(
         mappedBy = "shop",
         cascade = [CascadeType.ALL],
         fetch = FetchType.LAZY,

@@ -54,6 +54,6 @@ class ShopController(
     ): ResponseEntity<*> {
         shopService.updateById(shopId, shop)
 
-        return ResponseEntity.noContent().build<Any>()
+        return ResponseEntity.ok().build<Any>()
     }
 }
