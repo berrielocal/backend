@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: berrielocal
+    expose:
+      - 5433
+    ports:
+      - 5433:5432
+
+  spring-boot-app:
+    build: .
+    ports:
+      - "1111:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

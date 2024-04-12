@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/berrielocal
+    url: jdbc:postgresql://host.docker.internal:5433/berrielocal
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
