@@ -37,6 +37,8 @@ data class Shop(
 
     var isActive: Boolean = false,
 
+    var activationCode: String? = null,
+
     @Convert(converter = StringToSetCategoryAttributeConverter::class)
     var categories: Set<Category>? = emptySet(),
 
