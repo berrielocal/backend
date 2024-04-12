@@ -14,6 +14,8 @@ services:
       - 5433
     ports:
       - 5433:5432
+    networks:
+      - app-network
 
   spring-boot-app:
     build: .
@@ -22,7 +24,13 @@ services:
     depends_on:
       - psql-db
     environment:
-      - POSTGRES_URL=jdbc:postgresql://psql-db:5433/berrielocal
+      - POSTGRES_URL=jdbc:postgresql://host.docker.internal:5433/berrielocal
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
