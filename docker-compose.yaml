@@ -13,7 +13,7 @@ services:
     expose:
       - 5433
     ports:
-      - 5433:5432
+      - "5433:5432"
     networks:
       - app-network
 
@@ -24,7 +24,7 @@ services:
     depends_on:
       - psql-db
     environment:
-      - POSTGRES_URL=jdbc:postgresql://host.docker.internal:5433/berrielocal
+      - POSTGRES_URL=jdbc:postgresql://217.25.92.9:5433/berrielocal
     networks:
       - app-network
 
