@@ -9,7 +9,6 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.springframework.security.core.GrantedAuthority
@@ -67,14 +66,6 @@ data class Shop(
         orphanRemoval = false
     )
     var orders: MutableList<Order> = mutableListOf()
-
-    @OneToMany(
-        mappedBy = "customer",
-        cascade = [CascadeType.ALL],
-        fetch = FetchType.LAZY,
-        orphanRemoval = false
-    )
-    var cartItems: MutableList<CartItem> = mutableListOf()
 
     @OneToMany(
         mappedBy = "shop",

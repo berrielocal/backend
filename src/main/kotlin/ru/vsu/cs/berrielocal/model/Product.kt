@@ -25,9 +25,9 @@ data class Product(
 
     var units: String? = null,
 
-    var minSize: Double? = null,
+    var minSize: Long? = null,
 
-    var maxSize: Double? = null,
+    var maxSize: Long? = null,
 
     var cost: BigDecimal? = null,
 
@@ -49,13 +49,4 @@ data class Product(
         orphanRemoval = false
     )
     var orderParts: MutableList<OrderPart> = mutableListOf()
-
-
-    @OneToMany(
-        mappedBy = "product",
-        cascade = [CascadeType.ALL],
-        fetch = FetchType.LAZY,
-        orphanRemoval = false
-    )
-    var cartItems: MutableList<CartItem> = mutableListOf()
 }

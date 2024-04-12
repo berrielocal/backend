@@ -9,8 +9,8 @@ data class ProductModifyRequest(
     val name: String?,
     val imageUrl: String?,
     val cost: Double?,
-    val maxSize: Double?,
-    val minSize: Double?,
+    val maxSize: Long?,
+    val minSize: Long?,
     val units: String?,
     val shopId: Long?
 )
