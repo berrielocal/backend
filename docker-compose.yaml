@@ -1,8 +1,9 @@
 version: '2'
 
 services:
-  postgres:
+  psql-db:
     image: postgres
+    container_name: psql-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -19,9 +20,9 @@ services:
     ports:
       - "1111:8080"
     depends_on:
-      - postgres
+      - psql-db
     environment:
-      - POSTGRES_URL=jdbc:postgresql://localhost:5433/berrielocal
+      - POSTGRES_URL=jdbc:postgresql://psql-db:5433/berrielocal
 
 volumes:
   postgres_data:
