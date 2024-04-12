@@ -8,6 +8,7 @@ import ru.vsu.cs.berrielocal.dto.product.ProductResponse
 import ru.vsu.cs.berrielocal.exception.ProductNotFoundException
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.mapper.ProductMapper
+import ru.vsu.cs.berrielocal.model.Product
 import ru.vsu.cs.berrielocal.repository.ProductRepository
 
 @Service
@@ -22,14 +23,18 @@ class ProductService(
         return ProductListResponse(shopId = shopId, products = products)
     }
 
-    fun getById(productId: Long): ProductResponse? {
+    fun getById(productId: Long): ProductResponse {
+        return mapper.toProductResponse(getByIdEntity(productId))
+    }
+
+    fun getByIdEntity(productId: Long): Product {
         val productInDb = productRepository.findById(productId)
 
         if (productInDb.isEmpty) {
             throw ProductNotFoundException("Not found product by productId:$productId")
         }
 
-        return mapper.toProductResponse(productInDb.get())
+        return productInDb.get()
     }
 
     fun create(request: ProductModifyRequest): ProductCreateResponse? {

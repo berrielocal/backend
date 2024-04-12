@@ -54,7 +54,6 @@ class AuthController(
     @PostMapping("/users/refresh")
     fun refreshToken(@RequestBody refreshToken: String?): ResponseEntity<UserRefreshResponse> {
         return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(userService.refreshToken(refreshToken))
+            .ok(userService.refreshToken(refreshToken))
     }
 }
