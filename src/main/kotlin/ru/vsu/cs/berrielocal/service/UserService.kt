@@ -2,6 +2,8 @@ package ru.vsu.cs.berrielocal.service
 
 import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.AuthenticationException
@@ -16,13 +18,15 @@ import ru.vsu.cs.berrielocal.model.Shop
 import ru.vsu.cs.berrielocal.model.security.Role
 import ru.vsu.cs.berrielocal.repository.ShopRepository
 import ru.vsu.cs.berrielocal.security.JwtTokenProvider
+import java.util.*
 
 
 @Service
 class UserService(
-    val authenticationManager: AuthenticationManager,
-    val jwtTokenProvider: JwtTokenProvider,
-    val shopRepository: ShopRepository
+    private val authenticationManager: AuthenticationManager,
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val shopRepository: ShopRepository,
+    private val mailSender: JavaMailSender
 ) {
 
     @Transactional
@@ -45,13 +49,19 @@ class UserService(
             throw ResponseStatusException(HttpStatus.CONFLICT, "HTTP Status will be NOT FOUND (CODE 404)\n")
         } else {
             val encoder = BCryptPasswordEncoder()
+            val code = UUID.randomUUID().toString()
             shopRepository.save(
                 Shop(
                     role = Role.USER,
                     email = request.email,
-                    password = encoder.encode(request.password)
+                    password = encoder.encode(request.password),
+                    name = request.name,
+                    phoneNumber = request.phoneNumber,
+                    imageUrl = request.imageUrl,
+                    activationCode = code
                 )
             )
+            sendEmailByRegistration(request.email, code)
         }
     }
 
@@ -61,10 +71,37 @@ class UserService(
         return if (dbUser != null) createTokensForUser(dbUser) else null
     }
 
+    fun tryActivateAccount(activationCode: String): Boolean {
+        val user = shopRepository.findByActivationCode(activationCode)
+        return if (user == null) {
+            false
+        } else {
+            shopRepository.save(user.apply {
+                this.isActive = true
+            })
+            true
+        }
+    }
+
     private fun createTokensForUser(user: Shop): UserRefreshResponse {
-        return UserRefreshResponse(jwtTokenProvider.generateAccessToken(user), jwtTokenProvider.generateRefreshToken(user))
+        return UserRefreshResponse(
+            jwtTokenProvider.generateAccessToken(user),
+            jwtTokenProvider.generateRefreshToken(user)
+        )
     }
 
     private fun getByEmail(email: String) =
         shopRepository.findByEmail(email)
+
+    private fun sendEmailByRegistration(subject: String, activationCode: String) {
+        val message = SimpleMailMessage()
+        message.from = "berrielocal@gmail.com"
+        message.setTo(subject)
+        message.text = """
+            Благодарим Вас за регистрацию! Для подтверждения почты перейдите по ссылке -
+            http://localhost:8080/api/v1/users/activate/${activationCode}
+        """.trimIndent()
+
+        mailSender.send(message)
+    }
 }
