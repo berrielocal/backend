@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import ru.vsu.cs.berrielocal.exception.ChangeOrderPartStatusException
 import ru.vsu.cs.berrielocal.exception.CommentCreateException
+import ru.vsu.cs.berrielocal.exception.OrderCreateException
 import ru.vsu.cs.berrielocal.exception.OrderPartNotFoundException
 import ru.vsu.cs.berrielocal.exception.ProductAddToCartException
 import ru.vsu.cs.berrielocal.exception.ProductNotFoundException
@@ -19,7 +21,9 @@ class ControllerAdvice {
             ProductNotFoundException::class,
             CommentCreateException::class,
             ProductAddToCartException::class,
-            OrderPartNotFoundException::class
+            OrderPartNotFoundException::class,
+            OrderCreateException::class,
+            ChangeOrderPartStatusException::class,
         ]
     )
     @ResponseStatus(HttpStatus.BAD_REQUEST)
