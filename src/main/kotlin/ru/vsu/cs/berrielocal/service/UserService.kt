@@ -99,7 +99,7 @@ class UserService(
         message.setTo(subject)
         message.text = """
             Благодарим Вас за регистрацию! Для подтверждения почты перейдите по ссылке -
-            http://localhost:8080/api/v1/users/activate/${activationCode}
+            http://217.25.92.9:1111/api/v1/users/activate/${activationCode}
         """.trimIndent()
 
         mailSender.send(message)
