@@ -21,7 +21,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - POSTGRES_URL=jdbc:postgresql://host.docker.internal:5433/berrielocal
+      - POSTGRES_URL=jdbc:postgresql://localhost:5433/berrielocal
 
 volumes:
   postgres_data:
