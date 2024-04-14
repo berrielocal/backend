@@ -6,6 +6,6 @@ services:
     ports:
       - "1111:8080"
     environment:
-      - POSTGRES_URL=jdbc:postgresql://217.25.92.9:5433/berrielocal
+      - POSTGRES_URL=jdbc:postgresql://147.45.107.100/berrielocal
       - POSTGRES_LOGIN=gen_user
       - POSTGRES_PASSWORD=BCAlhlM?A27@pl
