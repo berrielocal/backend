@@ -81,4 +81,6 @@ class ProductService(
         productRepository.deleteById(productId)
     }
 
+    fun findCategoriesByShopId(shopId: Long?) = shopId?.let { productRepository.findAllCategoriesByShopId(shopId) }
+
 }

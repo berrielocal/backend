@@ -7,15 +7,17 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
 import ru.vsu.cs.berrielocal.dto.security.JwtResponse
 import ru.vsu.cs.berrielocal.dto.security.UserAuthorizationRequest
+import ru.vsu.cs.berrielocal.dto.security.UserIdResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRefreshResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRegistrationRequest
+import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.UserService
 
 
@@ -23,7 +25,8 @@ import ru.vsu.cs.berrielocal.service.UserService
 @RequestMapping(API_VERSION)
 @Tag(name = "AuthController", description = "Аутентификация")
 class AuthController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     @PostMapping("/users/login")
@@ -65,5 +68,13 @@ class AuthController(
         val activated = userService.tryActivateAccount(activationCode)
 
         return if (activated) ResponseEntity.ok().build<Any>() else ResponseEntity.badRequest().build<Any>()
+    }
+
+    @GetMapping("/users")
+    @Operation(summary = "Найти пользователя по id", description = "Принимает id пользователя")
+    fun getUserById(@RequestHeader("Authorization") token: String): ResponseEntity<UserIdResponse> {
+        val strId = jwtTokenProvider.getCustomClaimValue(token, "id")
+        val id = strId.toLong()
+        return ResponseEntity.ok(UserIdResponse(id))
     }
 }

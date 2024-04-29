@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
+import ru.vsu.cs.berrielocal.dto.product.EntityByCategoriesRequest
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
@@ -25,8 +26,8 @@ class ShopController(
 
     @GetMapping("/shop")
     @Operation(summary = "Получение всех магазинов")
-    fun getShops(): ResponseEntity<ShopListResponse> {
-        val shops = shopService.getShopsList()
+    fun getShops(@RequestBody request: EntityByCategoriesRequest): ResponseEntity<ShopListResponse> {
+        val shops = shopService.getShopsList(request.categories)
 
         return ResponseEntity.ok(shops)
     }
