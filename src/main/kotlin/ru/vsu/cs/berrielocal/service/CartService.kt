@@ -47,27 +47,25 @@ class CartService(
         return ProductAddToCartResponse(orderEntity.orderPartId)
     }
 
-    fun changeSizeOnProductInCart(orderPartId: Long, newSize: Long) {
-        val orderPartOptional = orderPartRepository.findById(orderPartId)
+    fun changeSizeOnProductInCart(productId: Long, newSize: Long) {
+        val orderPart = orderPartRepository.findByProductId(productId)
+            ?: throw OrderPartNotFoundException("Not found product in cart with id:$productId")
 
+        if (orderPart.status != OrderPartStatus.IN_CART)
+            throw OrderPartNotFoundException("Found product not in cart, orderPartId:${productId}")
 
-        if (orderPartOptional.isEmpty)
-            throw OrderPartNotFoundException("Not found product in cart with id:$orderPartId")
+        ifReceivedSizeNotBetweenMaxAndMinOfProductThrowException(newSize, orderPart.product!!)
 
-        val entity = orderPartOptional.get()
-
-        if (entity.status != OrderPartStatus.IN_CART)
-            throw OrderPartNotFoundException("Found product not in cart, orderPartId:${orderPartId}")
-
-        ifReceivedSizeNotBetweenMaxAndMinOfProductThrowException(newSize, entity.product!!)
-
-        orderPartRepository.save(entity.apply {
+        orderPartRepository.save(orderPart.apply {
             size = newSize
         })
     }
 
-    fun removeProductFromCart(orderPartId: Long) {
-        orderPartRepository.deleteById(orderPartId)
+    fun removeProductFromCart(productId: Long) {
+        val entity = orderPartRepository.findByProductId(productId)
+        entity?.orderPartId?.let {
+            orderPartRepository.deleteById(it)
+        }
     }
 
     private fun ifReceivedSizeNotBetweenMaxAndMinOfProductThrowException(receivedSize: Long, product: Product) {

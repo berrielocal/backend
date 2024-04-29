@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -14,7 +15,7 @@ import ru.vsu.cs.berrielocal.model.security.Role
 import ru.vsu.cs.berrielocal.security.JwtTokenFilter
 
 
-//@EnableWebSecurity
+@EnableWebSecurity
 @Configuration
 class SecurityConfiguration(
     private val jwtTokenFilter: JwtTokenFilter
@@ -23,7 +24,7 @@ class SecurityConfiguration(
     fun configure(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        http.authorizeHttpRequests().requestMatchers("/api/v1/users/login", "/api/v1/users/registration", "/api/v1/users/refresh", "/api/v1/users/activate/**")
+        http.authorizeHttpRequests().requestMatchers("/api/v1/users", "/api/v1/users/login", "/api/v1/users/registration", "/api/v1/users/refresh", "/api/v1/users/activate/**")
             .permitAll();
         http.authorizeHttpRequests().requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
             .permitAll()
