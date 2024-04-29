@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -63,9 +64,14 @@ class AuthController(
             .ok(userService.refreshToken(refreshToken))
     }
 
-    @GetMapping("/users/activate/{activationCode}")
-    fun activateAccount(@PathVariable activationCode: String): ResponseEntity<*> {
-        val activated = userService.tryActivateAccount(activationCode)
+    @PatchMapping("/users/activate/{activationCode}")
+    fun activateAccount(
+        @RequestHeader("Authorization") token: String,
+        @PathVariable activationCode: String
+    ): ResponseEntity<*> {
+        val strId = jwtTokenProvider.getCustomClaimValue(token, "id")
+        val id = strId.toLong()
+        val activated = userService.tryActivateAccount(id, activationCode)
 
         return if (activated) ResponseEntity.ok().build<Any>() else ResponseEntity.badRequest().build<Any>()
     }

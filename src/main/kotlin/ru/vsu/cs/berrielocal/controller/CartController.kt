@@ -42,23 +42,23 @@ class CartController(
         return ResponseEntity.ok().build<Any>()
     }
 
-    @PutMapping("/cart/item/{orderPartId}/{size}")
+    @PutMapping("/cart/item/{productId}/{size}")
     @Operation(summary = "Изменение размера объекта в корзине")
     fun changeSizeOnProductInCart(
-        @PathVariable orderPartId: Long,
+        @PathVariable productId: Long,
         @PathVariable size: Long,
     ): ResponseEntity<*> {
-        cartService.changeSizeOnProductInCart(orderPartId, size)
+        cartService.changeSizeOnProductInCart(productId, size)
 
         return ResponseEntity.ok().build<Any>()
     }
 
-    @DeleteMapping("/cart/item/{orderPartId}")
+    @DeleteMapping("/cart/item/{productId}")
     @Operation(summary = "Удаление объекта из корзины")
     fun changeSizeOnProductInCart(
-        @PathVariable orderPartId: Long
+        @PathVariable productId: Long
     ): ResponseEntity<*> {
-        cartService.removeProductFromCart(orderPartId)
+        cartService.removeProductFromCart(productId)
 
         return ResponseEntity.ok().build<Any>()
     }

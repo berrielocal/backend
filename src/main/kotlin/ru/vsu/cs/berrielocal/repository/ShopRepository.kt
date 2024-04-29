@@ -9,6 +9,4 @@ import java.util.*
 interface ShopRepository : JpaRepository<Shop, Long> {
 
     fun findByEmail(email: String?): Shop?
-
-    fun findByActivationCode(activationCode: String): Shop?
 }

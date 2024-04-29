@@ -1,5 +1,6 @@
 package ru.vsu.cs.berrielocal.service
 
+import kotlin.jvm.optionals.getOrNull
 import org.springframework.stereotype.Service
 import ru.vsu.cs.berrielocal.dto.product.ProductCreateResponse
 import ru.vsu.cs.berrielocal.dto.product.ProductListResponse
@@ -9,18 +10,29 @@ import ru.vsu.cs.berrielocal.exception.ProductNotFoundException
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.mapper.ProductMapper
 import ru.vsu.cs.berrielocal.model.Product
+import ru.vsu.cs.berrielocal.model.enums.Category
 import ru.vsu.cs.berrielocal.repository.ProductRepository
+import ru.vsu.cs.berrielocal.repository.ShopRepository
 
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
     private val mapper: ProductMapper,
-    private val shopService: ShopService
+    private val shopRepository: ShopRepository
 ) {
     fun getProductsByShopId(shopId: Long): ProductListResponse? {
-        val products = productRepository.findAllProductsByShopId(shopId).map(mapper::toProductResponse)
+        val products = productRepository.findAllProductsByShopId(shopId)
 
-        return ProductListResponse(shopId = shopId, products = products)
+        val categoriesList = Category.entries.toList()
+        val mapCategoriesWithProducts = mutableMapOf<Category, List<ProductResponse>?>()
+        categoriesList.forEach { category ->
+            val productsFromRepository = products.filter {
+                it.categories?.contains(category) ?: false
+            }.map (mapper::toProductResponse)
+            mapCategoriesWithProducts[category] = productsFromRepository.takeIf { it.isNotEmpty() }
+        }
+
+        return ProductListResponse(shopId = shopId, products = mapCategoriesWithProducts)
     }
 
     fun getById(productId: Long): ProductResponse {
@@ -40,7 +52,7 @@ class ProductService(
     fun create(request: ProductModifyRequest): ProductCreateResponse? {
         val productToSave = mapper.toProduct(null, request)
 
-        val shop = shopService.getById(request.shopId!!)
+        val shop = request.shopId?.let { shopRepository.findById(it).getOrNull() }
 
         return if (shop != null) {
             val productInDb = productRepository.save(
@@ -55,7 +67,7 @@ class ProductService(
 
     fun updateById(productId: Long, request: ProductModifyRequest) {
         val productToSave = mapper.toProduct(productId.toString(), request)
-        val shop = shopService.getById(request.shopId!!)
+        val shop = request.shopId?.let { shopRepository.findById(it).getOrNull() }
 
         if (shop != null) {
             val productInDb = productRepository.findById(productId).takeIf { it.isPresent }?.get()
