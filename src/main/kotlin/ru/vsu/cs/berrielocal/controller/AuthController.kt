@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.client.HttpClientErrorException.Unauthorized
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
 import ru.vsu.cs.berrielocal.dto.security.JwtResponse
 import ru.vsu.cs.berrielocal.dto.security.UserAuthorizationRequest
 import ru.vsu.cs.berrielocal.dto.security.UserIdResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRefreshResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRegistrationRequest
+import ru.vsu.cs.berrielocal.exception.UnauthorizedException
 import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.UserService
 
@@ -66,8 +68,8 @@ class AuthController(
 
     @PatchMapping("/users/activate/{activationCode}")
     fun activateAccount(
-        @RequestHeader("Authorization") token: String,
-        @PathVariable activationCode: String
+        @PathVariable activationCode: String,
+        @RequestHeader("Authorization") token: String
     ): ResponseEntity<*> {
         val strId = jwtTokenProvider.getCustomClaimValue(token, "id")
         val id = strId.toLong()
