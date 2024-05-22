@@ -27,19 +27,19 @@ class CartService(
         return OrderPartListResponse(items)
     }
 
-    fun addProductToCart(request: ProductAddToCartRequest): ProductAddToCartResponse {
+    fun addProductToCart(request: ProductAddToCartRequest, customerId: Long): ProductAddToCartResponse {
         val foundedProduct = productService.getByIdEntity(request.productId)
 
         ifReceivedSizeNotBetweenMaxAndMinOfProductThrowException(request.size, foundedProduct)
 
-        if (shopService.getById(request.customerId) == null)
-            throw ProductAddToCartException("Not found customer for id:${request.customerId}")
+        if (shopService.getById(customerId) == null)
+            throw ProductAddToCartException("Not found customer for id:${customerId}")
 
         val orderPart = OrderPart().apply {
-            status = OrderPartStatus.IN_CART
-            product = foundedProduct
-            size = request.size
-            customerId = request.customerId
+            this.status = OrderPartStatus.IN_CART
+            this.product = foundedProduct
+            this.size = request.size
+            this.customerId = customerId
         }
 
         val orderEntity = orderPartRepository.save(orderPart)

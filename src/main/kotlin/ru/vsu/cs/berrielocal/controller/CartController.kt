@@ -26,25 +26,26 @@ class CartController(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    @GetMapping("/cart/{customerId}")
+    @GetMapping("/cart")
     @Operation(summary = "Просмотр всех объектов в корзине покупателя")
     fun getAllItemsInCart(
-        @PathVariable customerId: Long,
         @RequestHeader("Authorization") token: String
     ): ResponseEntity<OrderPartListResponse> {
+        val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+
         val response = cartService.getAllProductsFromCart(customerId)
 
         return ResponseEntity.ok(response)
     }
 
-    @PostMapping("/cart/{customerId}")
+    @PostMapping("/cart")
     @Operation(summary = "Добавление продукта в корзину покупателя")
     fun addNewItemToCart(
-        @PathVariable customerId: Long,
         @RequestBody item: ProductAddToCartRequest,
         @RequestHeader("Authorization") token: String
     ): ResponseEntity<*> {
-        cartService.addProductToCart(item)
+        val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+        cartService.addProductToCart(item, customerId)
 
         return ResponseEntity.ok().build<Any>()
     }
