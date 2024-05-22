@@ -23,9 +23,9 @@ class OrderService(
 ) {
 
     @Transactional
-    fun acceptOrder(request: OrderCreateRequest) {
-        val customerFromDb = shopService.getById(request.customerId)
-            ?: throw OrderCreateException("Order not created, not found customer for id:${request.customerId}")
+    fun acceptOrder(request: OrderCreateRequest, customerId: Long) {
+        val customerFromDb = shopService.getById(customerId)
+            ?: throw OrderCreateException("Order not created, not found customer for id:${customerId}")
 
 
         val items = orderPartRepository.findAllByCustomerIdAndStatus(customerFromDb.shopId!!, OrderPartStatus.IN_CART)
@@ -33,7 +33,7 @@ class OrderService(
         if (items.isEmpty())
             throw OrderCreateException(
                 "Order not created: " +
-                        "not found any item in cart for customerId:${request.customerId}"
+                        "not found any item in cart for customerId:${customerId}"
             )
 
         val order = Order().apply {

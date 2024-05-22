@@ -11,6 +11,7 @@ import ru.vsu.cs.berrielocal.exception.OrderPartNotFoundException
 import ru.vsu.cs.berrielocal.exception.ProductAddToCartException
 import ru.vsu.cs.berrielocal.exception.ProductNotFoundException
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
+import ru.vsu.cs.berrielocal.exception.UnauthorizedException
 
 @RestControllerAdvice
 class ControllerAdvice {
@@ -28,4 +29,12 @@ class ControllerAdvice {
     )
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleExceptionWithNotFoundReason() { }
+
+    @ExceptionHandler(
+        value = [
+            UnauthorizedException::class
+        ]
+    )
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleUnauthorizedException() { }
 }

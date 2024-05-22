@@ -33,11 +33,13 @@ class ShopService(
         return ShopListResponse(shops = mapCategoriesWithShops)
     }
 
-    fun getByShopId(shopId: Long, customerId: Long): ShopAllInfoResponse? {
-        val matchLevel = matchService.evaluateMatchLevelBetweenCustomerAndShop(
-            customerId = customerId,
-            shopId = shopId
-        )
+    fun getByShopId(shopId: Long, customerId: Long?): ShopAllInfoResponse? {
+        val matchLevel = customerId?.let {
+            matchService.evaluateMatchLevelBetweenCustomerAndShop(
+                customerId = customerId,
+                shopId = shopId
+            )
+        } ?: 0.0
 
         val shopFromDb = shopRepository.findById(shopId)
 
