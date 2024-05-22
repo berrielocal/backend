@@ -6,5 +6,4 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class ProductAddToCartRequest(
     val size: Long = 1,
     val productId: Long,
-    val customerId: Long
 )
