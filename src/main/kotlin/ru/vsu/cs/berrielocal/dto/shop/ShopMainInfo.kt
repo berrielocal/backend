@@ -1,10 +1,10 @@
 package ru.vsu.cs.berrielocal.dto.shop
 
 data class ShopMainInfo(
-    val shopId: String? = null,
-    val name: String? = null,
-    val imageUrl: String? = null,
-    val matchLevel: Double? = null,
-    val email: String? = null,
-    val phoneNumber: String? = null,
+    var shopId: String? = null,
+    var name: String? = null,
+    var imageUrl: String? = null,
+    var matchLevel: Double? = null,
+    var email: String? = null,
+    var phoneNumber: String? = null,
 )

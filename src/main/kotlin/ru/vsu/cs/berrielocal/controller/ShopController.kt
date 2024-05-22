@@ -7,26 +7,29 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
+import ru.vsu.cs.berrielocal.dto.product.EntityByCategoriesRequest
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
+import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.ShopService
 
 @RestController
 @RequestMapping(API_VERSION)
 @Tag(name = "ShopController", description = "Работа с данными магазинов")
 class ShopController(
-    private val shopService: ShopService
+    private val shopService: ShopService,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     @GetMapping("/shop")
     @Operation(summary = "Получение всех магазинов")
-    fun getShops(): ResponseEntity<ShopListResponse> {
-        val shops = shopService.getShopsList()
+    fun getShops(@RequestBody request: EntityByCategoriesRequest): ResponseEntity<ShopListResponse> {
+        val shops = shopService.getShopsList(request.categories)
 
         return ResponseEntity.ok(shops)
     }
@@ -34,13 +37,21 @@ class ShopController(
     @GetMapping("/shop/{shopId}")
     @Operation(
         summary = "Получение информации о магазине по ID",
-        description = "В качестве входных параметров - customerId. " +
+        description = "В качестве входных параметров - customerId. Берется из токена. " +
+                "Если токен не валиден, то matchLevel = 0" +
                 "Относительно него расчитывается уровня совпадения интересов магазина и покупателя - matchLevel"
     )
     fun getShopById(
         @PathVariable shopId: Long,
-        @RequestParam customerId: Long
+        @RequestHeader(name = "Authorization", required = false) token: String?
     ): ResponseEntity<ShopAllInfoResponse> {
+        val customerId =
+            runCatching {
+                token?.let {
+                    jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+                }
+            }.getOrNull()
+
         val shop = shopService.getByShopId(shopId, customerId)
 
         return ResponseEntity.ok(shop)
@@ -50,8 +61,11 @@ class ShopController(
     @Operation(summary = "Изменение информации о магазине по ID")
     fun updateShop(
         @PathVariable shopId: Long,
-        @RequestBody shop: ShopUpdateRequest
+        @RequestBody shop: ShopUpdateRequest,
+        @RequestHeader("Authorization") token: String
     ): ResponseEntity<*> {
+        jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+
         shopService.updateById(shopId, shop)
 
         return ResponseEntity.ok().build<Any>()

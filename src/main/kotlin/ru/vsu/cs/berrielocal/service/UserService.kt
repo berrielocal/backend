@@ -49,7 +49,7 @@ class UserService(
             throw ResponseStatusException(HttpStatus.CONFLICT, "HTTP Status will be NOT FOUND (CODE 404)\n")
         } else {
             val encoder = BCryptPasswordEncoder()
-            val code = UUID.randomUUID().toString()
+            val code = Random().nextInt(10000, 99999).toString()
             shopRepository.save(
                 Shop(
                     role = Role.USER,
@@ -71,16 +71,24 @@ class UserService(
         return if (dbUser != null) createTokensForUser(dbUser) else null
     }
 
-    fun tryActivateAccount(activationCode: String): Boolean {
-        val user = shopRepository.findByActivationCode(activationCode)
-        return if (user == null) {
-            false
-        } else {
-            shopRepository.save(user.apply {
-                this.isActive = true
-            })
-            true
+    fun tryActivateAccount(userId: Long, activationCode: String): Boolean {
+        val user = shopRepository.findById(userId)
+
+        if (user.isEmpty) {
+            return false
         }
+
+        val entity = user.get()
+
+        if (entity.activationCode != activationCode) {
+            return false
+        }
+
+        shopRepository.save(entity.apply {
+            this.isActive = true
+        })
+
+        return true
     }
 
     private fun createTokensForUser(user: Shop): UserRefreshResponse {
@@ -98,8 +106,8 @@ class UserService(
         message.from = "berrielocal@gmail.com"
         message.setTo(subject)
         message.text = """
-            Благодарим Вас за регистрацию! Для подтверждения почты перейдите по ссылке -
-            http://localhost:8080/api/v1/users/activate/${activationCode}
+            Благодарим Вас за регистрацию! Для подтверждения почты введите код в приложении -
+            $activationCode
         """.trimIndent()
 
         mailSender.send(message)

@@ -20,4 +20,13 @@ interface OrderPartRepository : JpaRepository<OrderPart, Long> {
         """
     )
     fun findAllActiveByShopId(shopId: Long): List<OrderPart>
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            SELECT * FROM order_parts op
+            WHERE op.product_product_id = :productId
+        """
+    )
+    fun findByProductId(productId: Long): OrderPart?
 }

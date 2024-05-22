@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5433/berrielocal
+    url: ${POSTGRES_URL}
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: root
+    username: ${POSTGRES_LOGIN}
+    password: ${POSTGRES_PASSWORD}
   flyway:
     enabled: true
     locations: classpath:db

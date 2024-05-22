@@ -4,30 +4,42 @@ import kotlin.jvm.optionals.getOrNull
 import org.springframework.stereotype.Service
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
+import ru.vsu.cs.berrielocal.dto.shop.ShopMainInfo
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.mapper.ShopMapper
+import ru.vsu.cs.berrielocal.model.enums.Category
 import ru.vsu.cs.berrielocal.repository.ShopRepository
 
 @Service
 class ShopService(
     private val shopRepository: ShopRepository,
     private val mapper: ShopMapper,
-    private val matchService: MatchService
+    private val matchService: MatchService,
+    private val productService: ProductService
 ) {
-    fun getShopsList(): ShopListResponse {
+    fun getShopsList(categories: List<Category>?): ShopListResponse {
         val shopsFromRepository = shopRepository.findAll()
 
-        val mainInfoShopsList = shopsFromRepository.map(mapper::toMainInfo)
+        val categoriesList = categories.takeIf { it != null } ?: Category.entries.toList()
+        val mapCategoriesWithShops = mutableMapOf<Category, List<ShopMainInfo>?>()
+        categoriesList.forEach { category ->
+            val shopsWithCurrentCategory = shopsFromRepository.filter {
+                productService.findCategoriesByShopId(it.shopId)?.contains(category) ?: false
+            }.map (mapper::toMainInfo)
+            mapCategoriesWithShops[category] = shopsWithCurrentCategory.takeIf { it.isNotEmpty() }
+        }
 
-        return ShopListResponse(shops = mainInfoShopsList)
+        return ShopListResponse(shops = mapCategoriesWithShops)
     }
 
-    fun getByShopId(shopId: Long, customerId: Long): ShopAllInfoResponse? {
-        val matchLevel = matchService.evaluateMatchLevelBetweenCustomerAndShop(
-            customerId = customerId,
-            shopId = shopId
-        )
+    fun getByShopId(shopId: Long, customerId: Long?): ShopAllInfoResponse? {
+        val matchLevel = customerId?.let {
+            matchService.evaluateMatchLevelBetweenCustomerAndShop(
+                customerId = customerId,
+                shopId = shopId
+            )
+        } ?: 0.0
 
         val shopFromDb = shopRepository.findById(shopId)
 

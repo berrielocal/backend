@@ -8,18 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
 import ru.vsu.cs.berrielocal.dto.comment.CommentCreateRequest
 import ru.vsu.cs.berrielocal.dto.comment.CommentsResponse
+import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.CommentService
 
 @RestController
 @RequestMapping(API_VERSION)
 @Tag(name = "Comment Controller", description = "Работа с комментариями")
 class CommentController(
-    private val commentService: CommentService
+    private val commentService: CommentService,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     @GetMapping("/comment/shop/{shopId}")
@@ -35,9 +38,11 @@ class CommentController(
     @PostMapping("/comment")
     @Operation(summary = "Сохранение нового комментария покупателя")
     fun saveNewComment(
-        @RequestBody request: CommentCreateRequest
+        @RequestBody request: CommentCreateRequest,
+        @RequestHeader("Authorization") token: String
     ): ResponseEntity<*> {
-        commentService.saveComment(request)
+        val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+        commentService.saveComment(request, customerId)
 
         return ResponseEntity.ok().build<Any>()
     }
@@ -45,8 +50,10 @@ class CommentController(
     @DeleteMapping("/comment/{commentId}")
     @Operation(summary = "Удаление комментария по commentId")
     fun deleteComment(
-        @PathVariable commentId: Long
+        @PathVariable commentId: Long,
+        @RequestHeader("Authorization") token: String
     ): ResponseEntity<*> {
+        jwtTokenProvider.getCustomClaimValue(token, "id")
         commentService.deleteComment(commentId)
 
         return ResponseEntity.ok().build<Any>()

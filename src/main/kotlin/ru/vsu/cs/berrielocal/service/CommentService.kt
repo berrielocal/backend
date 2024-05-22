@@ -20,14 +20,14 @@ class CommentService(
         return CommentsResponse(comments)
     }
 
-    fun saveComment(request: CommentCreateRequest)  {
-        val customerFromDb = shopService.getById(request.customerId)
+    fun saveComment(request: CommentCreateRequest, customerId: Long)  {
+        val customerFromDb = shopService.getById(customerId)
         val shopFromDb = shopService.getById(request.shopId)
 
         if (customerFromDb == null)
-            throw CommentCreateException("Not found customer by id:${request.customerId}")
+            throw CommentCreateException("Not found customer by id:${customerId}")
         if (shopFromDb == null)
-            throw CommentCreateException("Not found shop by id:${request.customerId}")
+            throw CommentCreateException("Not found shop by id:${customerId}")
 
         if (request.rate == null || request.rate < 0)
             throw CommentCreateException("Not saved comment with illegal argument rate:${request.rate}")
