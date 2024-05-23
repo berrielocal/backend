@@ -19,7 +19,7 @@ class MatchService(
 
         val shopCategories = productRepository.findAllCategoriesByShopId(shopId)
 
-        if (customerDb.isEmpty || shopCategories.isEmpty())
+        if (customerDb.isEmpty)
             throw ShopNotFoundException("Entity not found in db by id")
 
         val customerEntity = customerDb.get()
@@ -28,7 +28,11 @@ class MatchService(
 
         val intersection = evaluateIntersection(customerCategories, shopCategories)
 
-        val matchLevel = intersection.count() * 1.0 / customerCategories.count().coerceAtMost(shopCategories.count())
+        val matchLevel = if (shopCategories.isEmpty()) {
+            0.0
+        } else {
+            intersection.count() * 1.0 / customerCategories.count().coerceAtMost(shopCategories.count())
+        }
 
         return (matchLevel * 100).round()
     }

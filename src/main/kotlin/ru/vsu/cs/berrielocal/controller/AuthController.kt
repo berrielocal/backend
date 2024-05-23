@@ -69,7 +69,7 @@ class AuthController(
     @PatchMapping("/users/activate/{activationCode}")
     fun activateAccount(
         @PathVariable activationCode: String,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         val strId = jwtTokenProvider.getCustomClaimValue(token, "id")
         val id = strId.toLong()
@@ -80,7 +80,7 @@ class AuthController(
 
     @GetMapping("/users")
     @Operation(summary = "Найти пользователя по id", description = "Принимает id пользователя")
-    fun getUserById(@RequestHeader("Authorization") token: String): ResponseEntity<UserIdResponse> {
+    fun getUserById(@RequestHeader("AccessToken") token: String): ResponseEntity<UserIdResponse> {
         val strId = jwtTokenProvider.getCustomClaimValue(token, "id")
         val id = strId.toLong()
         return ResponseEntity.ok(UserIdResponse(id))

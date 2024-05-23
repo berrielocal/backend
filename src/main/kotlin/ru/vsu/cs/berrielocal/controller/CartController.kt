@@ -29,7 +29,7 @@ class CartController(
     @GetMapping("/cart")
     @Operation(summary = "Просмотр всех объектов в корзине покупателя")
     fun getAllItemsInCart(
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<OrderPartListResponse> {
         val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 
@@ -42,7 +42,7 @@ class CartController(
     @Operation(summary = "Добавление продукта в корзину покупателя")
     fun addNewItemToCart(
         @RequestBody item: ProductAddToCartRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
         cartService.addProductToCart(item, customerId)
@@ -55,7 +55,7 @@ class CartController(
     fun changeSizeOnProductInCart(
         @PathVariable productId: Long,
         @PathVariable size: Long,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
         cartService.changeSizeOnProductInCart(productId, size)
@@ -67,7 +67,7 @@ class CartController(
     @Operation(summary = "Удаление объекта из корзины")
     fun changeSizeOnProductInCart(
         @PathVariable productId: Long,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
         cartService.removeProductFromCart(productId)
