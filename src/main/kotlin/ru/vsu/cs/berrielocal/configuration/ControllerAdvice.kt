@@ -28,7 +28,9 @@ class ControllerAdvice {
         ]
     )
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleExceptionWithNotFoundReason() { }
+    fun handleExceptionWithNotFoundReason(exception: RuntimeException): String? {
+        return exception.message
+    }
 
     @ExceptionHandler(
         value = [

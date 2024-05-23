@@ -39,7 +39,7 @@ class CommentController(
     @Operation(summary = "Сохранение нового комментария покупателя")
     fun saveNewComment(
         @RequestBody request: CommentCreateRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
         commentService.saveComment(request, customerId)
@@ -51,7 +51,7 @@ class CommentController(
     @Operation(summary = "Удаление комментария по commentId")
     fun deleteComment(
         @PathVariable commentId: Long,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
         commentService.deleteComment(commentId)

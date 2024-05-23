@@ -53,7 +53,7 @@ class ProductController(
     @Operation(summary = "Добавление продукта в магазин")
     fun updateProduct(
         @Valid @RequestBody product: ProductModifyRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<ProductCreateResponse> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
 
@@ -67,7 +67,7 @@ class ProductController(
     fun updateProduct(
         @PathVariable productId: Long,
         @Valid @RequestBody product: ProductModifyRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
 
@@ -80,7 +80,7 @@ class ProductController(
     @Operation(summary = "Удаление продукта")
     fun deleteProduct(
         @PathVariable productId: Long,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
 
