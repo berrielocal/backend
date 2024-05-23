@@ -1,7 +1,11 @@
 package ru.vsu.cs.berrielocal.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -43,12 +47,13 @@ class ShopController(
     )
     fun getShopById(
         @PathVariable shopId: Long,
-        @RequestHeader(name = "Authorization", required = false) token: String?
+        @RequestHeader(name = "AccessToken") authToken: String?,
     ): ResponseEntity<ShopAllInfoResponse> {
+
         val customerId =
             runCatching {
-                token?.let {
-                    jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+                authToken?.let {
+                    jwtTokenProvider.getCustomClaimValue(it, "id").toLong()
                 }
             }.getOrNull()
 
@@ -62,7 +67,7 @@ class ShopController(
     fun updateShop(
         @PathVariable shopId: Long,
         @RequestBody shop: ShopUpdateRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 

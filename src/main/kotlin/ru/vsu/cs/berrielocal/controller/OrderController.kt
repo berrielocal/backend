@@ -30,7 +30,7 @@ class OrderController(
     @Operation(summary = "Создание заказа")
     fun acceptOrder(
         @RequestBody request: OrderCreateRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
         orderService.acceptOrder(request, customerId)
@@ -41,7 +41,7 @@ class OrderController(
     @GetMapping("order/customer")
     @Operation(summary = "Получени всех активных заказов по покупателю")
     fun getAllActiveOrdersByCustomerId(
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<OrderPartByShopIdResponse> {
         val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
         val response = orderService.getAllActiveOrdersByCustomerId(customerId)
@@ -53,7 +53,7 @@ class OrderController(
     @Operation(summary = "Получение всех активных заказов по продавцу")
     fun getAllActiveOrdersByShopId(
         @PathVariable shopId: Long,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<OrderPartByShopIdResponse> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
         val response = orderService.getActiveOrdersForShopId(shopId)
@@ -65,7 +65,7 @@ class OrderController(
     @Operation(summary = "Изменение статуса у заказа")
     fun changeStatusOnOrderPart(
         @RequestBody request: ChangeOrderStatusRequest,
-        @RequestHeader("Authorization") token: String
+        @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
         jwtTokenProvider.getCustomClaimValue(token, "id")
         orderService.setNewStatusToOrderPartById(request)
