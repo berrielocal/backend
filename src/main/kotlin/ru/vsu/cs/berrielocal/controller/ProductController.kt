@@ -55,9 +55,9 @@ class ProductController(
         @Valid @RequestBody product: ProductModifyRequest,
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<ProductCreateResponse> {
-        jwtTokenProvider.getCustomClaimValue(token, "id")
+        val id = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 
-        val response = productService.create(product)
+        val response = productService.create(product, id)
 
         return ResponseEntity.ok(response)
     }
@@ -69,9 +69,9 @@ class ProductController(
         @Valid @RequestBody product: ProductModifyRequest,
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
-        jwtTokenProvider.getCustomClaimValue(token, "id")
+        val shopId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 
-        productService.updateById(productId, product)
+        productService.updateById(productId, product, shopId)
 
         return ResponseEntity.ok().build<Any>()
     }

@@ -54,12 +54,22 @@ class ShopService(
 
 
     fun updateById(shopId: Long, shopFromRequest: ShopUpdateRequest) {
-        val shopModel = mapper.toModel(
-            shopId = shopId.toString(),
-            updateRequest = shopFromRequest
-        )
+        val shopFromDbByIdOpt = shopRepository.findById(shopId)
 
-        shopRepository.save(shopModel)
+        if (shopFromDbByIdOpt.isEmpty) {
+            throw ShopNotFoundException("Not found any shop by shopId: $shopId")
+        }
+        val shopFromDb = shopFromDbByIdOpt.get()
+
+        shopFromDb.apply {
+            this.imageUrl = shopFromRequest.imageUrl ?: imageUrl
+            this.email = shopFromRequest.email ?: email
+            this.name = shopFromRequest.name ?: name
+            this.phoneNumber = shopFromRequest.phoneNumber ?: phoneNumber
+            this.categories = shopFromRequest.categories ?: categories
+        }
+
+        shopRepository.save(shopFromDb)
     }
 
 }
