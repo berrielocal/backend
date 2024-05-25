@@ -37,7 +37,7 @@ class JwtTokenProvider(
     fun generateRefreshToken(user: Shop): String {
         val algorithm = Algorithm.HMAC256(refreshSecretKey)
         return JWT.create()
-            .withSubject(user.name)
+            .withSubject(user.email)
             .withExpiresAt(Date(System.currentTimeMillis() + refreshValidity))
             .sign(algorithm)
     }
