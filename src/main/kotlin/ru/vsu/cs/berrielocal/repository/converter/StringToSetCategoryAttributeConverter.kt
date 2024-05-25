@@ -13,8 +13,8 @@ class StringToSetCategoryAttributeConverter
     override fun convertToEntityAttribute(dbData: String?) =
         dbData
             ?.split(SEPARATOR)
-            ?.mapNotNull {
-                Category.entries.firstOrNull { it.name == dbData }
+            ?.mapNotNull { category ->
+                Category.entries.firstOrNull { it.name == category }
             }
             ?.toSet() ?: emptySet()
 

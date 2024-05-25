@@ -49,10 +49,10 @@ class ProductService(
         return productInDb.get()
     }
 
-    fun create(request: ProductModifyRequest): ProductCreateResponse? {
+    fun create(request: ProductModifyRequest, shopId: Long): ProductCreateResponse? {
         val productToSave = mapper.toProduct(null, request)
 
-        val shop = request.shopId?.let { shopRepository.findById(it).getOrNull() }
+        val shop = shopRepository.findById(shopId).getOrNull()
 
         return if (shop != null) {
             val productInDb = productRepository.save(
@@ -61,13 +61,13 @@ class ProductService(
 
             ProductCreateResponse(productInDb.productId!!)
         } else {
-            throw ShopNotFoundException("Not found shop by shopId:${request.shopId}")
+            throw ShopNotFoundException("Not found shop by shopId:${shopId}")
         }
     }
 
-    fun updateById(productId: Long, request: ProductModifyRequest) {
+    fun updateById(productId: Long, request: ProductModifyRequest, shopId: Long) {
         val productToSave = mapper.toProduct(productId.toString(), request)
-        val shop = request.shopId?.let { shopRepository.findById(it).getOrNull() }
+        val shop = shopRepository.findById(shopId).getOrNull()
 
         if (shop != null) {
             val productInDb = productRepository.findById(productId).takeIf { it.isPresent }?.get()
@@ -85,7 +85,7 @@ class ProductService(
                 productInDb
             )
         } else {
-            throw ShopNotFoundException("Not found shop by shopId:${request.shopId}")
+            throw ShopNotFoundException("Not found shop by shopId:${shopId}")
         }
     }
 

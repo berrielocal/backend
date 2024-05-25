@@ -21,6 +21,7 @@ import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
 import ru.vsu.cs.berrielocal.model.enums.Category
+import ru.vsu.cs.berrielocal.repository.ShopRepository
 import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.ShopService
 
@@ -29,7 +30,7 @@ import ru.vsu.cs.berrielocal.service.ShopService
 @Tag(name = "ShopController", description = "Работа с данными магазинов")
 class ShopController(
     private val shopService: ShopService,
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider, private val shopRepository: ShopRepository
 ) {
 
     @GetMapping("/shop")
@@ -64,14 +65,13 @@ class ShopController(
         return ResponseEntity.ok(shop)
     }
 
-    @PatchMapping("/shop/{shopId}")
+    @PatchMapping("/shop")
     @Operation(summary = "Изменение информации о магазине по ID")
     fun updateShop(
-        @PathVariable shopId: Long,
         @RequestBody shop: ShopUpdateRequest,
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
-        jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+        val shopId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 
         shopService.updateById(shopId, shop)
 

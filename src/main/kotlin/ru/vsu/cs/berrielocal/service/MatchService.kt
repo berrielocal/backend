@@ -28,10 +28,10 @@ class MatchService(
 
         val intersection = evaluateIntersection(customerCategories, shopCategories)
 
-        val matchLevel = if (shopCategories.isEmpty()) {
+        val matchLevel = if (shopCategories.isEmpty() || customerCategories.isEmpty()) {
             0.0
         } else {
-            intersection.count() * 1.0 / customerCategories.count().coerceAtMost(shopCategories.count())
+            intersection.count() * 1.0 / Math.max(shopCategories.count(), customerCategories.count())
         }
 
         return (matchLevel * 100).round()
