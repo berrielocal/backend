@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
 import ru.vsu.cs.berrielocal.dto.product.EntityByCategoriesRequest
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
+import ru.vsu.cs.berrielocal.model.enums.Category
 import ru.vsu.cs.berrielocal.security.JwtTokenProvider
 import ru.vsu.cs.berrielocal.service.ShopService
 
@@ -32,8 +34,8 @@ class ShopController(
 
     @GetMapping("/shop")
     @Operation(summary = "Получение всех магазинов")
-    fun getShops(@RequestBody request: EntityByCategoriesRequest): ResponseEntity<ShopListResponse> {
-        val shops = shopService.getShopsList(request.categories)
+    fun getShops(@RequestParam category: List<Category>?): ResponseEntity<ShopListResponse> {
+        val shops = shopService.getShopsList(category)
 
         return ResponseEntity.ok(shops)
     }
