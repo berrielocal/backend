@@ -17,6 +17,7 @@ import ru.vsu.cs.berrielocal.configuration.API_VERSION
 import ru.vsu.cs.berrielocal.dto.security.JwtResponse
 import ru.vsu.cs.berrielocal.dto.security.UserAuthorizationRequest
 import ru.vsu.cs.berrielocal.dto.security.UserIdResponse
+import ru.vsu.cs.berrielocal.dto.security.UserRefreshRequest
 import ru.vsu.cs.berrielocal.dto.security.UserRefreshResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRegistrationRequest
 import ru.vsu.cs.berrielocal.exception.UnauthorizedException
@@ -61,9 +62,9 @@ class AuthController(
     }
 
     @PostMapping("/users/refresh")
-    fun refreshToken(@RequestBody refreshToken: String?): ResponseEntity<UserRefreshResponse> {
+    fun refreshToken(@RequestBody request: UserRefreshRequest): ResponseEntity<UserRefreshResponse> {
         return ResponseEntity
-            .ok(userService.refreshToken(refreshToken))
+            .ok(userService.refreshToken(request.refreshToken))
     }
 
     @PatchMapping("/users/activate/{activationCode}")
