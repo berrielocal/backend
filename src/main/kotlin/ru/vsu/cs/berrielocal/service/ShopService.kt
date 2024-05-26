@@ -74,4 +74,7 @@ class ShopService(
         shopRepository.save(shopFromDb)
     }
 
+    fun deleteById(shopId: Long) {
+        shopRepository.deleteById(shopId)
+    }
 }
