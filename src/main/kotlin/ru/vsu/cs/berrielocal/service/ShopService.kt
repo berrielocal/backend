@@ -9,6 +9,7 @@ import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.mapper.ShopMapper
 import ru.vsu.cs.berrielocal.model.enums.Category
+import ru.vsu.cs.berrielocal.repository.CommentRepository
 import ru.vsu.cs.berrielocal.repository.ShopRepository
 
 @Service
@@ -16,7 +17,8 @@ class ShopService(
     private val shopRepository: ShopRepository,
     private val mapper: ShopMapper,
     private val matchService: MatchService,
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val commentRepository: CommentRepository
 ) {
     fun getShopsList(categories: List<Category>?): ShopListResponse {
         val shopsFromRepository = shopRepository.findAll()
@@ -24,9 +26,9 @@ class ShopService(
         val categoriesList = categories.takeIf { it != null } ?: Category.entries.toList()
         val mapCategoriesWithShops = mutableMapOf<Category, List<ShopMainInfo>?>()
         categoriesList.forEach { category ->
-            val shopsWithCurrentCategory = shopsFromRepository.filter {
+            val shopsWithCurrentCategory = shopsFromRepository.filterNotNull().filter {
                 productService.findCategoriesByShopId(it.shopId)?.contains(category) ?: false
-            }.map (mapper::toMainInfo)
+            }.map { mapper.toMainInfo(it, commentRepository.findAverageRateBySellerId(it.shopId) ?: 0.0) }
             mapCategoriesWithShops[category] = shopsWithCurrentCategory.takeIf { it.isNotEmpty() }
         }
 

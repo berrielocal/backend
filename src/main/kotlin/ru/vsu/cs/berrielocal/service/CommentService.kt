@@ -7,6 +7,7 @@ import ru.vsu.cs.berrielocal.exception.CommentCreateException
 import ru.vsu.cs.berrielocal.mapper.CommentMapper
 import ru.vsu.cs.berrielocal.model.Comment
 import ru.vsu.cs.berrielocal.repository.CommentRepository
+import java.time.LocalDateTime
 
 @Service
 class CommentService(
@@ -37,6 +38,7 @@ class CommentService(
             seller = shopFromDb
             rate = request.rate
             text = request.text
+            createdAt = LocalDateTime.now()
         }
         commentRepository.save(commentToSave)
     }
