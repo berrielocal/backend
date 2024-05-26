@@ -13,6 +13,7 @@ import ru.vsu.cs.berrielocal.model.Order
 import ru.vsu.cs.berrielocal.model.enums.OrderPartStatus
 import ru.vsu.cs.berrielocal.repository.OrderPartRepository
 import ru.vsu.cs.berrielocal.repository.OrderRepository
+import java.time.LocalDateTime
 
 @Service
 class OrderService(
@@ -47,6 +48,7 @@ class OrderService(
             it.apply {
                 this.status = OrderPartStatus.ORDERED
                 this.order = orderFromDb
+                this.updatedAt = LocalDateTime.now()
             }
             orderPartRepository.save(it)
         }

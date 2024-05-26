@@ -10,6 +10,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import ru.vsu.cs.berrielocal.model.enums.OrderPartStatus
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "order_parts")
@@ -35,7 +36,9 @@ data class OrderPart(
 
     var size: Long? = null,
 
-    var customerId: Long? = null
+    var customerId: Long? = null,
+
+    var updatedAt: LocalDateTime? = null
 )
 
 
