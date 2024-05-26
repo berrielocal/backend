@@ -11,6 +11,7 @@ import ru.vsu.cs.berrielocal.model.OrderPart
 import ru.vsu.cs.berrielocal.model.Product
 import ru.vsu.cs.berrielocal.model.enums.OrderPartStatus
 import ru.vsu.cs.berrielocal.repository.OrderPartRepository
+import java.time.LocalDateTime
 
 @Service
 class CartService(
@@ -40,6 +41,7 @@ class CartService(
             this.product = foundedProduct
             this.size = request.size
             this.customerId = customerId
+            this.updatedAt = LocalDateTime.now()
         }
 
         val orderEntity = orderPartRepository.save(orderPart)
