@@ -10,7 +10,7 @@ import ru.vsu.cs.berrielocal.model.Shop
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface ShopMapper {
 
-    fun toMainInfo(source: Shop): ShopMainInfo
+    fun toMainInfo(source: Shop, matchLevel: Double): ShopMainInfo
 
     fun toAllInfo(source: Shop, matchLevel: Double): ShopAllInfoResponse
 

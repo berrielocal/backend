@@ -1,11 +1,7 @@
 package ru.vsu.cs.berrielocal.controller
 
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.Parameters
-import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import ru.vsu.cs.berrielocal.configuration.API_VERSION
-import ru.vsu.cs.berrielocal.dto.product.EntityByCategoriesRequest
 import ru.vsu.cs.berrielocal.dto.shop.ShopAllInfoResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopListResponse
 import ru.vsu.cs.berrielocal.dto.shop.ShopUpdateRequest
@@ -30,7 +25,7 @@ import ru.vsu.cs.berrielocal.service.ShopService
 @Tag(name = "ShopController", description = "Работа с данными магазинов")
 class ShopController(
     private val shopService: ShopService,
-    private val jwtTokenProvider: JwtTokenProvider, private val shopRepository: ShopRepository
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     @GetMapping("/shop")

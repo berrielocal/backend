@@ -14,4 +14,13 @@ interface CommentRepository : JpaRepository<Comment, Long> {
         """
     )
     fun findAllByShopId(shopId: Long): List<Comment>
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            SELECT ROUND(cast(AVG(rate) as numeric), 2) FROM comments c
+            WHERE c.seller_shop_id = :sellerId and c.rate is not null
+        """
+    )
+    fun findAverageRateBySellerId(sellerId: Long?): Double?
 }

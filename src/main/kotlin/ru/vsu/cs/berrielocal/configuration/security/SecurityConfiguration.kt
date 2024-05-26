@@ -31,7 +31,7 @@ class SecurityConfiguration(
         http.authorizeHttpRequests().requestMatchers("/api/v1/product/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/cart/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/comment/shop/**").permitAll()
-        http.authorizeHttpRequests().requestMatchers("/api/v1/comment/**").hasAnyRole(Role.USER.toString())
+        http.authorizeHttpRequests().requestMatchers("/api/v1/comment/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/shop/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/order/**").permitAll()
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
