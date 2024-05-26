@@ -3,6 +3,7 @@ package ru.vsu.cs.berrielocal.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -69,6 +70,18 @@ class ShopController(
         val shopId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
 
         shopService.updateById(shopId, shop)
+
+        return ResponseEntity.ok().build<Any>()
+    }
+
+    @DeleteMapping("/shop")
+    @Operation(summary = "Удаление магазина")
+    fun deleteShop(
+        @RequestHeader("AccessToken") token: String
+    ): ResponseEntity<*> {
+        val shopId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+
+        shopService.deleteById(shopId)
 
         return ResponseEntity.ok().build<Any>()
     }
