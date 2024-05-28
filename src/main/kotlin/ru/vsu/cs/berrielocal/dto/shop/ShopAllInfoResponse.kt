@@ -7,5 +7,7 @@ data class ShopAllInfoResponse(
     var name: String? = null,
     var imageUrl: String? = null,
     var matchLevel: Double? = null,
-    var categories: Set<Category>? = null
+    var categories: Set<Category>? = null,
+    var email: String? = null,
+    var phoneNumber: String? = null,
 )
