@@ -1,7 +1,5 @@
 package ru.vsu.cs.berrielocal.dto.product
 
-import ru.vsu.cs.berrielocal.model.enums.Category
-
 data class ProductResponse(
     var productId: Long? = null,
     var name: String? = null,
@@ -11,5 +9,5 @@ data class ProductResponse(
     var minSize: Long? = null,
     var units: String? = null,
     var shopId: Long? = null,
-    var categories: Set<Category>? = null
+    var categories: Set<String>? = null
 )

@@ -28,7 +28,13 @@ class ProductService(
         categoriesList.forEach { category ->
             val productsFromRepository = products.filter {
                 it.categories?.contains(category) ?: false
-            }.map (mapper::toProductResponse)
+            }.map { product ->
+                val mapped = mapper.toProductResponse(product)
+
+                mapped.categories = product.categories?.map(Category::type)?.toSet()
+
+                mapped
+            }
             mapCategoriesWithProducts[category] = productsFromRepository.takeIf { it.isNotEmpty() }
         }
 
@@ -36,7 +42,13 @@ class ProductService(
     }
 
     fun getById(productId: Long): ProductResponse {
-        return mapper.toProductResponse(getByIdEntity(productId))
+        val product = getByIdEntity(productId)
+
+        val mapped = mapper.toProductResponse(product)
+
+        mapped.categories = product.categories?.map(Category::type)?.toSet()
+
+        return mapped
     }
 
     fun getByIdEntity(productId: Long): Product {
