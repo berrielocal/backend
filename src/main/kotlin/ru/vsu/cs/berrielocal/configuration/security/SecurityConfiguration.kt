@@ -34,6 +34,7 @@ class SecurityConfiguration(
         http.authorizeHttpRequests().requestMatchers("/api/v1/comment/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/shop/**").permitAll()
         http.authorizeHttpRequests().requestMatchers("/api/v1/order/**").permitAll()
+        http.authorizeHttpRequests().requestMatchers("/api/v1/categories/**").permitAll()
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
