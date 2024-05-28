@@ -12,7 +12,7 @@ interface ShopMapper {
 
     fun toMainInfo(source: Shop, matchLevel: Double): ShopMainInfo
 
-    fun toAllInfo(source: Shop, matchLevel: Double): ShopAllInfoResponse
+    fun toAllInfo(source: Shop, matchLevel: Double, rating: Double?): ShopAllInfoResponse
 
     fun toModel(shopId: String, updateRequest: ShopUpdateRequest): Shop
 }

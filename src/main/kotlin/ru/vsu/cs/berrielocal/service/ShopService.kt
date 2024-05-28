@@ -46,7 +46,12 @@ class ShopService(
         val shopFromDb = shopRepository.findById(shopId)
 
         return if (shopFromDb.isEmpty.not()) {
-            mapper.toAllInfo(shopFromDb.get(), matchLevel)
+            val shop = shopFromDb.get()
+            val mapped = mapper.toAllInfo(shop, matchLevel, commentRepository.findAverageRateBySellerId(shop.shopId))
+
+            mapped.categories = shop.categories?.map(Category::type)?.toSet()
+
+            mapped
         } else {
             throw ShopNotFoundException("Not found any shop by shopId: $shopId")
         }
