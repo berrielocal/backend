@@ -47,7 +47,12 @@ class ShopService(
 
         return if (shopFromDb.isEmpty.not()) {
             val shop = shopFromDb.get()
-            val mapped = mapper.toAllInfo(shop, matchLevel, commentRepository.findAverageRateBySellerId(shop.shopId))
+            val mapped =
+                mapper.toAllInfo(
+                    shop,
+                    matchLevel,
+                    commentRepository.findAverageRateBySellerId(shop.shopId) ?: 0.0
+                )
 
             mapped.categories = shop.categories?.map(Category::type)?.toSet()
 
