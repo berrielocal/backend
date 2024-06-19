@@ -14,6 +14,7 @@ import ru.vsu.cs.berrielocal.dto.security.JwtResponse
 import ru.vsu.cs.berrielocal.dto.security.UserAuthorizationRequest
 import ru.vsu.cs.berrielocal.dto.security.UserRefreshResponse
 import ru.vsu.cs.berrielocal.dto.security.UserRegistrationRequest
+import ru.vsu.cs.berrielocal.exception.WrongPasswordException
 import ru.vsu.cs.berrielocal.model.Shop
 import ru.vsu.cs.berrielocal.model.security.Role
 import ru.vsu.cs.berrielocal.repository.ShopRepository
@@ -32,15 +33,19 @@ class UserService(
     @Transactional
     @Throws(AuthenticationException::class)
     fun authorizeUser(request: UserAuthorizationRequest): JwtResponse? {
-        authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                request.email, request.password
+        val user = getByEmail(request.email) ?: return null
+        try {
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    request.email, request.password
+                )
             )
-        )
-        val user = getByEmail(request.email)
-        return if (user != null) {
-            JwtResponse(jwtTokenProvider.generateAccessToken(user), jwtTokenProvider.generateRefreshToken(user))
-        } else null
+        } catch (e: AuthenticationException) {
+            throw WrongPasswordException()
+        }
+
+
+        return JwtResponse(jwtTokenProvider.generateAccessToken(user), jwtTokenProvider.generateRefreshToken(user))
     }
 
     @Transactional
