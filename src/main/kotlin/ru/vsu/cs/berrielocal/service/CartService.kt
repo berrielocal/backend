@@ -25,7 +25,11 @@ class CartService(
         val items = orderPartRepository.findAllByCustomerIdAndStatus(customerId, OrderPartStatus.IN_CART)
             .map(mapper::toMainInfo)
 
-        return OrderPartListResponse(items)
+        val sum = items.filter { it.productId != null }.sumOf {
+            productService.getById(it.productId!!).cost?.let { it1 -> it.size?.times(it1) } ?: 0.0
+        }.toBigDecimal()
+
+        return OrderPartListResponse(items, sum)
     }
 
     fun addProductToCart(request: ProductAddToCartRequest, customerId: Long): ProductAddToCartResponse {
