@@ -12,6 +12,7 @@ import ru.vsu.cs.berrielocal.exception.ProductAddToCartException
 import ru.vsu.cs.berrielocal.exception.ProductNotFoundException
 import ru.vsu.cs.berrielocal.exception.ShopNotFoundException
 import ru.vsu.cs.berrielocal.exception.UnauthorizedException
+import ru.vsu.cs.berrielocal.exception.WrongPasswordException
 
 @RestControllerAdvice
 class ControllerAdvice {
@@ -34,7 +35,8 @@ class ControllerAdvice {
 
     @ExceptionHandler(
         value = [
-            UnauthorizedException::class
+            UnauthorizedException::class,
+            WrongPasswordException::class,
         ]
     )
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
