@@ -79,6 +79,7 @@ class ShopService(
             this.name = shopFromRequest.name ?: name
             this.phoneNumber = shopFromRequest.phoneNumber ?: phoneNumber
             this.categories = shopFromRequest.categories ?: categories
+            this.description = shopFromRequest.description ?: description
         }
 
         shopRepository.save(shopFromDb)

@@ -91,6 +91,7 @@ class ProductService(
                 this.cost = productToSave.cost ?: this.cost
                 this.name = productToSave.name ?: this.name
                 this.units = productToSave.units ?: this.units
+                this.description = productToSave.description ?: this.description
             }
 
             productRepository.save(
