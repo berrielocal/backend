@@ -13,5 +13,6 @@ data class ProductModifyRequest(
     val maxSize: Long?,
     val minSize: Long?,
     val units: String?,
-    var categories: Set<Category>? = null
+    var categories: Set<Category>? = null,
+    var description: String? = null,
 )

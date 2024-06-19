@@ -8,5 +8,6 @@ data class UserRegistrationRequest(
     val name: String? = null,
     val phoneNumber: String? = null,
     val imageUrl: String? = null,
-    val categories: Set<Category>? = null
+    val categories: Set<Category>? = null,
+    var description: String? = null,
 )

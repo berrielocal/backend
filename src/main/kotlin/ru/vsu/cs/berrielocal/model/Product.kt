@@ -33,6 +33,8 @@ data class Product(
 
     var imageUrl: String? = null,
 
+    var description: String? = null,
+
     @Convert(converter = StringToSetCategoryAttributeConverter::class)
     var categories: Set<Category>? = emptySet(),
 

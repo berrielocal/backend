@@ -9,5 +9,6 @@ data class ProductResponse(
     var minSize: Long? = null,
     var units: String? = null,
     var shopId: Long? = null,
-    var categories: Set<String>? = null
+    var categories: Set<String>? = null,
+    var description: String? = null,
 )
