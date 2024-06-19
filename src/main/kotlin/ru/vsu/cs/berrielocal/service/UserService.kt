@@ -58,7 +58,8 @@ class UserService(
                     name = request.name,
                     phoneNumber = request.phoneNumber,
                     imageUrl = request.imageUrl,
-                    activationCode = code
+                    activationCode = code,
+                    description = request.description
                 )
             )
             sendEmailByRegistration(request.email, code)

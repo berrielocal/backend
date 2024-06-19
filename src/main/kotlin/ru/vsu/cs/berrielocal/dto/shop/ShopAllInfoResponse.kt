@@ -10,4 +10,5 @@ data class ShopAllInfoResponse(
     var email: String? = null,
     var phoneNumber: String? = null,
     var rating: Double? = null,
+    var description: String? = null,
 )

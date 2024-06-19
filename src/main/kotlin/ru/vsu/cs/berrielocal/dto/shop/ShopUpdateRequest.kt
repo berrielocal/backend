@@ -10,4 +10,5 @@ data class ShopUpdateRequest(
     val email: String? = null,
     val phoneNumber: String? = null,
     val categories: Set<Category>? = null,
+    var description: String? = null,
 )
