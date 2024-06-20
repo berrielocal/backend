@@ -54,7 +54,7 @@ class CartService(
     }
 
     fun changeSizeOnProductInCart(productId: Long, newSize: Long) {
-        val orderPart = orderPartRepository.findByProductId(productId)
+        val orderPart = orderPartRepository.findByProductIdInCart(productId)
             ?: throw OrderPartNotFoundException("Not found product in cart with id:$productId")
 
         if (orderPart.status != OrderPartStatus.IN_CART)
@@ -68,7 +68,8 @@ class CartService(
     }
 
     fun removeProductFromCart(productId: Long) {
-        val entity = orderPartRepository.findByProductId(productId)
+        val entity = orderPartRepository.findByProductIdInCart(productId)
+
         entity?.orderPartId?.let {
             orderPartRepository.deleteById(it)
         }
