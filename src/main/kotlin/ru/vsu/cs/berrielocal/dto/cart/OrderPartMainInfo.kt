@@ -10,4 +10,5 @@ data class OrderPartMainInfo(
     var size: Long? = null,
     var status: OrderPartStatus = OrderPartStatus.IN_CART,
     var updatedAt: LocalDateTime? = null,
+    var orderedAt: LocalDateTime? = null
 )

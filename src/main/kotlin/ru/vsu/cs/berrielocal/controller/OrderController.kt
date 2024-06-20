@@ -39,7 +39,7 @@ class OrderController(
     }
 
     @GetMapping("order/customer")
-    @Operation(summary = "Получени всех активных заказов по покупателю")
+    @Operation(summary = "Получение всех активных заказов по покупателю")
     fun getAllActiveOrdersByCustomerId(
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<OrderPartByShopIdResponse> {

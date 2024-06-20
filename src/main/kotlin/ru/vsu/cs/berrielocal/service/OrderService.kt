@@ -44,11 +44,13 @@ class OrderService(
 
         val orderFromDb = orderRepository.save(order)
 
+        val orderedAt = LocalDateTime.now()
         items.forEach {
             it.apply {
                 this.status = OrderPartStatus.ORDERED
                 this.order = orderFromDb
-                this.updatedAt = LocalDateTime.now()
+                this.updatedAt = orderedAt
+                this.orderedAt = orderedAt
             }
             orderPartRepository.save(it)
         }

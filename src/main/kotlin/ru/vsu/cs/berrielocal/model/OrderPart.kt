@@ -38,7 +38,9 @@ data class OrderPart(
 
     var customerId: Long? = null,
 
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null,
+
+    var orderedAt: LocalDateTime? = null
 )
 
 
