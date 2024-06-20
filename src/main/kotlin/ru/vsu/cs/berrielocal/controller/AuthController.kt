@@ -3,6 +3,7 @@ package ru.vsu.cs.berrielocal.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -38,7 +39,7 @@ class AuthController(
     fun authorizeUser(@RequestBody request: UserAuthorizationRequest): ResponseEntity<JwtResponse?> {
         val response = userService.authorizeUser(request)
 
-        return if (response != null) ResponseEntity.ok(response) else ResponseEntity.badRequest().build()
+        return if (response != null) ResponseEntity.ok(response) else ResponseEntity(HttpStatusCode.valueOf(403))
     }
 
     @PostMapping("/users/registration")
