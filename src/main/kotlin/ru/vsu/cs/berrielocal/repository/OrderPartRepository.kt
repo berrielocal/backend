@@ -26,6 +26,7 @@ interface OrderPartRepository : JpaRepository<OrderPart, Long> {
         value = """
             SELECT * FROM order_parts op
             WHERE op.product_product_id = :productId
+            AND op.status != 'IN_CART'
         """
     )
     fun findByProductId(productId: Long): OrderPart?
