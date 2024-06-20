@@ -27,7 +27,8 @@ interface OrderPartRepository : JpaRepository<OrderPart, Long> {
             SELECT * FROM order_parts op
             WHERE op.product_product_id = :productId
             AND op.status = 'IN_CART'
+            AND op.customer_id = :customerId
         """
     )
-    fun findByProductIdInCart(productId: Long): OrderPart?
+    fun findByProductIdAndCustomerIdInCart(productId: Long, customerId: Long): OrderPart?
 }

@@ -57,8 +57,8 @@ class CartController(
         @PathVariable size: Long,
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
-        jwtTokenProvider.getCustomClaimValue(token, "id")
-        cartService.changeSizeOnProductInCart(productId, size)
+        val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+        cartService.changeSizeOnProductInCart(productId, size, customerId)
 
         return ResponseEntity.ok().build<Any>()
     }
@@ -69,8 +69,8 @@ class CartController(
         @PathVariable productId: Long,
         @RequestHeader("AccessToken") token: String
     ): ResponseEntity<*> {
-        jwtTokenProvider.getCustomClaimValue(token, "id")
-        cartService.removeProductFromCart(productId)
+        val customerId = jwtTokenProvider.getCustomClaimValue(token, "id").toLong()
+        cartService.removeProductFromCart(productId, customerId)
 
         return ResponseEntity.ok().build<Any>()
     }
