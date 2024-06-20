@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 @Schema
 data class OrderPartMainInfo(
     var productId: Long? = null,
+    var orderPartId: Long? = null,
     var size: Long? = null,
     var status: OrderPartStatus = OrderPartStatus.IN_CART,
     var updatedAt: LocalDateTime? = null,
